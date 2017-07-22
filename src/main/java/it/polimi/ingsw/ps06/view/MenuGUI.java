@@ -41,8 +41,8 @@ public class MenuGUI extends Observable implements Menu {
  
 		double ratio= (screenSize.getWidth()/screenSize.getHeight());
 		
-		width = (int)((screenSize.getWidth()*70/100)*(1.377 / ratio));
-		height = (int)(screenSize.getHeight()*70/100);
+		width = (int)((screenSize.getWidth()*50/100)*(1.377 / ratio));
+		height = (int)(screenSize.getHeight()*50/100);
     	
 		
 		//Caricamento e resize delle immagini

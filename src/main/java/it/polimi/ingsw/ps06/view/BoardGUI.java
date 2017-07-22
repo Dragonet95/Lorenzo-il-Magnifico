@@ -366,8 +366,8 @@ public class BoardGUI extends Observable implements Board {
 		resourcesInfo.setForeground(Color.BLACK);
 		resourcesInfo.setHorizontalAlignment(JTextField.CENTER);
 		
-		actionsLog.setLocation((int)screenSize.getWidth()*20/100,(int)(screenSize.getHeight()*86/100));
-		actionsLog.setSize((int)screenSize.getWidth()*60/100,(int)screenSize.getHeight()*5/100);
+		actionsLog.setLocation((int)screenSize.getWidth()*18/100,(int)(screenSize.getHeight()*86/100));
+		actionsLog.setSize((int)screenSize.getWidth()*64/100,(int)screenSize.getHeight()*5/100);
 		actionsLog.setOpaque(false);
 		actionsLog.setEditable(false);
 		actionsLog.setBorder(null);
@@ -655,7 +655,7 @@ public class BoardGUI extends Observable implements Board {
         for(int j=0; j<players.length;j++){ players[j].setVisible(false); }
         for(int j=0; j<placements.length;j++){ towers.add(placements[j]); }
              
-        for(int j=0; j<playersCheck.length;j++){ desktopFrame.add(playersCheck[j]); }
+        for(int j=0; j<playersCheck.length;j++){ desktop.add(playersCheck[j]); }
         for(int j=0; j<dices.length;j++){ others.add(dices[j]); }
         for(int j=0; j<orders.length;j++){ others.add(orders[j]); }
         for(int j=0; j<playersInfo.length;j++){ desktop.add(playersInfo[j]); }
