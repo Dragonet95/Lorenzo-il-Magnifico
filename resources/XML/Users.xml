@@ -1,4 +1,4 @@
-<users>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><users>
 
 	<user>
 		<username>mfeo15</username>
@@ -27,4 +27,4 @@
 		<max_score>37</max_score>
 	</user>
 
-</users>
+<user><username>Username</username><password>a1308b7983fef7def9ffd06bed7ff767fa4216baf9d9d911af1e7e2e</password><game_counter>0</game_counter><win_counter>0</win_counter><second_place_counter>0</second_place_counter><max_score>0</max_score></user><user><username>aa</username><password>a1308b7983fef7def9ffd06bed7ff767fa4216baf9d9d911af1e7e2e</password><game_counter>0</game_counter><win_counter>0</win_counter><second_place_counter>0</second_place_counter><max_score>0</max_score></user><user><username>aaabc</username><password>a1308b7983fef7def9ffd06bed7ff767fa4216baf9d9d911af1e7e2e</password><game_counter>0</game_counter><win_counter>0</win_counter><second_place_counter>0</second_place_counter><max_score>0</max_score></user><user><username>cicici</username><password>a1308b7983fef7def9ffd06bed7ff767fa4216baf9d9d911af1e7e2e</password><game_counter>0</game_counter><win_counter>0</win_counter><second_place_counter>0</second_place_counter><max_score>0</max_score></user><user><username>papapa</username><password>a1308b7983fef7def9ffd06bed7ff767fa4216baf9d9d911af1e7e2e</password><game_counter>0</game_counter><win_counter>0</win_counter><second_place_counter>0</second_place_counter><max_score>0</max_score></user><user><username>peppee</username><password>a1308b7983fef7def9ffd06bed7ff767fa4216baf9d9d911af1e7e2e</password><game_counter>0</game_counter><win_counter>0</win_counter><second_place_counter>0</second_place_counter><max_score>0</max_score></user><user><username>parappappo</username><password>a1308b7983fef7def9ffd06bed7ff767fa4216baf9d9d911af1e7e2e</password><game_counter>0</game_counter><win_counter>0</win_counter><second_place_counter>0</second_place_counter><max_score>0</max_score></user></users>

@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
@@ -27,6 +28,7 @@ import it.polimi.ingsw.ps06.model.events.EventClose;
 import it.polimi.ingsw.ps06.model.events.RoomHasLoaded;
 import it.polimi.ingsw.ps06.model.events.StoryBoard2Board;
 import it.polimi.ingsw.ps06.networking.messages.MessageGameStart;
+import it.polimi.ingsw.ps06.networking.messages.MessageRegisterUser;
 import it.polimi.ingsw.ps06.networking.messages.MessageUser;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
@@ -48,6 +50,7 @@ public class RoomGUI extends Observable implements Room {
 	private boolean mute = false;
 	private AudioClip mediaPlayer4;
 	private Media hit2,hit, yes,no;
+	private JProgressBar progress;
 
 		
 	@Override
@@ -107,6 +110,13 @@ public class RoomGUI extends Observable implements Room {
 	        
 		//Inizializzazione dei componenti
        	
+       	progress = new JProgressBar();
+       	progress.setVisible(false);
+        progress.setIndeterminate(true);
+        progress.setLocation(width*35/100, height*48/100);
+        progress.setSize(width*30/100, height*2/100 );
+        f.add(progress);
+       	
        	menuSingle = new JButton("PLAY OFFLINE");
        	menuSingle.setLocation(width*25/100,height*43/100);
        	setMenuButton(menuSingle,1);
@@ -158,7 +168,7 @@ public class RoomGUI extends Observable implements Room {
             }
         });
         
-        password = new JPasswordField("Passowrd");
+        password = new JPasswordField("Password");
         password.setLocation(width*35/100,(int)(height*59/100));
         password.setSize(width*30/100,(int)(height*4/100));
         password.setOpaque(true);
@@ -344,6 +354,19 @@ public class RoomGUI extends Observable implements Room {
             {
         		notifyExit();
                 f.dispose();
+            }
+            
+        });
+        
+        register.addMouseListener(new MouseAdapter()
+        {
+            public void mousePressed(MouseEvent evt)
+            {
+            	MediaPlayer mediaPlayer3 = new MediaPlayer(hit2);
+        		mediaPlayer3.play();
+        		registerCredentials(username.getText(),String.valueOf(password.getPassword()));
+        		
+        		progress.setVisible(true);
             }
             
         });
@@ -586,6 +609,17 @@ public class RoomGUI extends Observable implements Room {
 		}
 	}
 
+	
+	@Override
+	public void registerCredentials(String username, String password) {
+		setChanged();
+		MessageRegisterUser registerUser;
+		
+		registerUser = new MessageRegisterUser(username,password);
+		notifyObservers(registerUser);
+		
+	}
+
 	@Override
 	public void giveCredentials(String username, String password) {
 		setChanged();
@@ -594,8 +628,6 @@ public class RoomGUI extends Observable implements Room {
 		userMessage = new MessageUser(username, password);
 		notifyObservers(userMessage);
 		
-		MediaPlayer mediaPlayer1 = new MediaPlayer(no);
-		mediaPlayer1.play();
 	}
 
 	@Override
@@ -675,4 +707,34 @@ public class RoomGUI extends Observable implements Room {
         room.show();
 
     }
+
+	@Override
+	public void userHasRegistered(String username, int stat1, int stat2, int stat3, int stat4) {
+		
+		logged.setText("Welcome, "+username);
+		this.stat1.setText("Partite Giocate: " +stat1);
+		this.stat2.setText("Partite Vinte: " +stat2);
+		this.stat3.setText("Secondi Posti: " +stat3);
+		this.stat4.setText("Punteggio Massimo: " +stat4);
+		
+		MediaPlayer mediaPlayer5 = new MediaPlayer(yes);
+		mediaPlayer5.play();
+		
+		progress.setVisible(false);
+		
+		transform(7);
+		
+	}
+
+	@Override
+	public void userHasFailed() {
+		
+		MediaPlayer mediaPlayer1 = new MediaPlayer(no);
+		mediaPlayer1.play();
+		progress.setVisible(false);
+		
+	}
+    
+	
+    
 }

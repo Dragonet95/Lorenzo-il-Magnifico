@@ -1,7 +1,22 @@
 package it.polimi.ingsw.ps06.networking.messages;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import it.polimi.ingsw.ps06.model.Game;
 import it.polimi.ingsw.ps06.model.PersonalBoard;
@@ -68,6 +83,12 @@ public class MessageParser implements MessageVisitor {
 
 				c.setAssociatedUser(u);
 			}
+		}
+		
+		else{
+
+			MessageUserLoginHasFailed usrFailed = new MessageUserLoginHasFailed();
+			c.asyncSend(usrFailed);
 		}
 
 		SocketServer.getInstance().sendWaitingConnectionsStats();
@@ -403,5 +424,115 @@ public class MessageParser implements MessageVisitor {
 	public void visit( MessageTelegramHasBeenSent message) {
 		Board b = ((Board) theSupporter);
 		b.addChatText( message.getPlayer() , message.getTelegram());
+	}
+
+	@Override
+	public void visit(MessageRegisterUser message) {
+		
+		Connection c = ((Connection) theSupporter);
+		ParserUsers users = new ParserUsers("resources/XML/Users.xml");
+		
+		if (!(users.contains( message.getUsername() ))) 
+		{
+			try{
+				
+				DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = documentFactory.newDocumentBuilder(); 
+	
+				Document d = builder.parse( getClass().getResourceAsStream("/XML/Users.xml"));
+				
+				Element root = d.getDocumentElement();
+				
+				Element rootElement = d.createElement("user");
+				
+				Element username = d.createElement("username");
+				username.appendChild(d.createTextNode(message.getUsername()));
+				rootElement.appendChild(username);
+				
+				String hash = "";
+				
+				MessageDigest messageDigest = MessageDigest.getInstance("SHA-224");
+				messageDigest.update( message.getPassword().getBytes() );
+				byte[] digestedBytes = messageDigest.digest();
+				hash = DatatypeConverter.printHexBinary(digestedBytes).toLowerCase();
+				
+				Element password = d.createElement("password");
+				password.appendChild(d.createTextNode(hash));
+				rootElement.appendChild(password);
+				
+				Element game_counter = d.createElement("game_counter");
+				game_counter.appendChild(d.createTextNode("0"));
+				rootElement.appendChild(game_counter);
+				
+				Element win_counter = d.createElement("win_counter");
+				win_counter.appendChild(d.createTextNode("0"));
+				rootElement.appendChild(win_counter);
+				
+				Element second_place_counter = d.createElement("second_place_counter");
+				second_place_counter.appendChild(d.createTextNode("0"));
+				rootElement.appendChild(second_place_counter);
+				
+				Element max_score = d.createElement("max_score");
+				max_score.appendChild(d.createTextNode("0"));
+				rootElement.appendChild(max_score);
+				
+				root.appendChild(rootElement);
+				
+				DOMSource source = new DOMSource(d);
+	
+		        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		        Transformer transformer = transformerFactory.newTransformer();
+		        StreamResult result = new StreamResult("resources/XML/Users.xml");
+		        transformer.transform(source, result);
+		        
+			}
+			catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			ParserUsers users2 = new ParserUsers("resources/XML/Users.xml");
+			User u = users2.getUser( message.getUsername() );
+		
+			MessageUserHasRegistered usrRegistered = new MessageUserHasRegistered(u.getUsername(), 0,0,0,0);
+
+			c.asyncSend(usrRegistered);
+
+			//c.setAssociatedUser(u);
+		}
+		else{
+			MessageUserLoginHasFailed usrFailed = new MessageUserLoginHasFailed();
+			c.asyncSend(usrFailed);
+		}
+
+		SocketServer.getInstance().sendWaitingConnectionsStats();
+		
+	}
+
+	@Override
+	public void visit(MessageUserHasRegistered message) {
+		
+		Room r = ((Room) theSupporter);
+		r.userHasRegistered( message.getUsername(), 
+				message.getGameCounter(), 
+				message.getWinCounder(), 
+				message.getSecondPlaceCounter(), 
+				message.getMaxScore() 
+				);
+		
+	}
+
+	@Override
+	public void visit(MessageUserLoginHasFailed message) {
+		
+		Room r = ((Room) theSupporter);
+		r.userHasFailed();
+		
 	}
 }

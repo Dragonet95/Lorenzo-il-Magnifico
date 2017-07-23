@@ -17,6 +17,13 @@ public interface MessageVisitor {
 	void visit(MessageDisconnect message);
 	
 	/**
+	 * Messaggio contenitore delle credenziali da registrare
+	 * 
+	 * @param 	message		messaggio da visitare
+	 */
+	void visit(MessageRegisterUser message);
+	
+	/**
 	 * Messaggio contenitore della stringa inviata da un Client in chat
 	 * 
 	 * @param 	message		messaggio da visitare
@@ -71,6 +78,26 @@ public interface MessageVisitor {
 	 * @see					it.polimi.ingsw.ps06.networking.messages.MessageUser
 	 */
 	void visit(MessageUserHasLogged message);
+	
+	/**
+	 * <p>Messaggio di aggiornamento delle connessioni a seguito di una registrazione</p>
+	 * <p>Il Messaggio viene generato a seguito della ricezione di un MessageRegisterUser</p>
+	 * 
+	 * @param 	message		messaggio da visitare
+	 * 
+	 * @see					it.polimi.ingsw.ps06.networking.messages.MessageRegisterUser
+	 */
+	void visit(MessageUserHasRegistered message);
+	
+	/**
+	 * <p>Messaggio di aggiornamento delle connessioni a seguito di un Login</p>
+	 * <p>Il Messaggio viene generato a seguito della ricezione di un MessageUser</p>
+	 * 
+	 * @param 	message		messaggio da visitare
+	 * 
+	 * @see					it.polimi.ingsw.ps06.networking.messages.MessageUser
+	 */
+	void visit(MessageUserLoginHasFailed message);
 	
 	/**
 	 * Messaggio contenitore dell'insieme di connessioni in attesa di una nuova partita

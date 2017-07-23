@@ -130,6 +130,14 @@ public class RoomCLI extends Observable implements Room {
 		
 	}
 
+	
+	
+	@Override
+	public void registerCredentials(String username, String password) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	@Override
 	public void hasStarted() {
 		

@@ -34,6 +34,14 @@ public interface Room {
 	void giveCredentials(String username, String password);
 
 	/**
+	 * Metodo per registrare credenziali personali
+	 * 
+	 * @param	username	stringa per lo username dell'utenza
+	 * @param 	password	stringa per la password dell'utenza
+	 */
+	void registerCredentials(String username, String password);
+	
+	/**
 	 * Metodo per l'aggiunta di un nuovo observer alla View
 	 * 
 	 * @param	o	observer da aggiungere
@@ -78,4 +86,21 @@ public interface Room {
 	 * @param 	stat4		valore della statistica4 del giocatore
 	 */
 	void userHasLoggedIn(String username, int stat1, int stat2, int stat3, int stat4);
+	
+	/**
+	 * Metodo invocato a seguito di un Login avvenuto con successo
+	 * 
+	 * @param 	username	nome utente dell'utenza appena loggata
+	 * @param 	stat1		valore della statistica1 del giocatore
+	 * @param 	stat2		valore della statistica2 del giocatore
+	 * @param 	stat3		valore della statistica3 del giocatore
+	 * @param 	stat4		valore della statistica4 del giocatore
+	 */
+	void userHasRegistered(String username, int stat1, int stat2, int stat3, int stat4);
+	
+	/**
+	 * Metodo invocato a seguito di un Login (o registrazione) non avvenuto
+	 * 
+	 */
+	void userHasFailed();
 }
